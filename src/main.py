@@ -20,6 +20,7 @@ clock = pygame.time.Clock()
 main_view = MainView(settings)
 sprite_family = GameObjectFactory(settings)
 player = sprite_family.create_player()
+bullet1_img = sprite_family.bullet1_img
 
 # Start Game
 running = True
@@ -32,6 +33,7 @@ while running:
     main_view.screen.blit(main_view.background, (0, 0))
 
     # Draw the assortment of game object
+    ### Draw player
     if not player.is_hit:
         main_view.screen.blit(player.image[player.img_index], player.rect)
         # make dynamic effect by changing img_index
@@ -42,6 +44,25 @@ while running:
         player_down_index += 1
         if player_down_index > 47:
             running = False
+
+    ### Draw bullet which shoot by player
+    if not player.is_hit:
+        if shoot_frequency % 15 == 0:
+            #bullet_sound.play()
+            player.shoot(bullet1_img)
+
+        shoot_frequency += 1
+        if shoot_frequency >= 15:
+            shoot_frequency = 0
+
+    # Move bullet
+    for bullet in player.bullets:
+        bullet.move()
+        if bullet.rect.bottom < 0:
+            player.bullets.remove(bullet)
+
+    # Show on the screen
+    player.bullets.draw(main_view.screen)
 
 
     # Update display

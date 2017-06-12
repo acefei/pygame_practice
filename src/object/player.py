@@ -1,4 +1,5 @@
 import pygame
+from bullet import *
 
 
 class Player(pygame.sprite.Sprite):
@@ -9,14 +10,14 @@ class Player(pygame.sprite.Sprite):
             self.image.append(plane_img.subsurface(player_rect[i]).convert_alpha())
         self.rect = player_rect[0]
         self.rect.topleft = init_pos
-        self.speed = 8
+        self.speed = settings.PLAYER_SPEED
         self.bullets = pygame.sprite.Group()
         self.img_index = 0
         self.is_hit = False
         self.settings = settings
 
     def shoot(self, bullet_img):
-        bullet = Bullet(bullet_img, self.rect.midtop)
+        bullet = Bullet(bullet_img, self.rect.midtop, self.settings)
         self.bullets.add(bullet)
 
     def moveUp(self):
