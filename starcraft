@@ -1,0 +1,4 @@
+#!/bin/sh
+export PYTHONPATH=$PWD/src:$PYTHONPATH
+export DISPLAY=nan-fsu:0
+python src/main.py
