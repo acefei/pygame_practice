@@ -6,12 +6,13 @@ from utils.image_spliter import *
 
 class GameObjectFactory(object):
     def __init__(self, settings):
-        self.init_bitmap(settings)
+        self.settings = settings
+        self.init_bitmap()
         self.set_player_rect()
 
-    def init_bitmap(self, settings):
-        self.image = pygame.image.load(settings.SHOOT_IMAGE)
-        self.image_pack = get_image_info(settings.SHOOT_IMAGE_PACK)
+    def init_bitmap(self):
+        self.image = pygame.image.load(self.settings.SHOOT_IMAGE)
+        self.image_pack = get_image_info(self.settings.SHOOT_IMAGE_PACK)
 
     def set_player_rect(self):
         self.player_rect = []
@@ -24,5 +25,5 @@ class GameObjectFactory(object):
 
     def create_player(self):
         player_init_pos = [50, 650]
-        return Player(self.image, self.player_rect, player_init_pos)
+        return Player(self.image, self.player_rect, player_init_pos, self.settings)
 
