@@ -8,7 +8,6 @@ class GameObjectFactory(object):
     def __init__(self, settings):
         self.settings = settings
         self.init_bitmap()
-        self.set_player_rect()
         self.set_bullet1_rect()
         self.set_enemy1_rect()
 
@@ -16,18 +15,9 @@ class GameObjectFactory(object):
         self.image = pygame.image.load(self.settings.SHOOT_IMAGE)
         self.image_pack = get_image_info(self.settings.SHOOT_IMAGE_PACK)
 
-    def set_player_rect(self):
-        self.player_rect = []
-        for k in sorted(self.image_pack.keys()):
-            if 'hero' not in k:
-                continue
-            (left, top) = map(int, self.image_pack[k]['xy'].split(','))
-            (width, height) = map(int, self.image_pack[k]['size'].split(','))
-            self.player_rect.append(pygame.Rect(left, top, width, height))
-
     def create_player(self):
         player_init_pos = [50, 650]
-        return Player(self.image, self.player_rect, player_init_pos, self.settings)
+        return Player(self.image, self.image_pack, player_init_pos, self.settings)
 
     def set_bullet1_rect(self):
         k = 'bullet1'
@@ -39,6 +29,12 @@ class GameObjectFactory(object):
     @property
     def bullet1_img(self):
         return self.image.subsurface(self.bullet1_rect)
+
+    def create_enemies(self, enemy_frequency):
+        if enemy_frequency % 50 == 0:
+            enemy1_init_pos = [random.randint(0, self.settings.SCREEN_WIDTH - enemy1_rect.width), 0]
+            enemy1 = Enemy(enemy1_img, enemy1_down_imgs, enemy1_init_pos)
+            enemies1.add(enemy1)
 
     def set_enemy1_rect(self):
         k = 'enemy1'

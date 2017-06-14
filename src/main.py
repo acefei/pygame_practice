@@ -35,12 +35,12 @@ while running:
     # Draw the assortment of game object
     ### Draw player
     if not player.is_hit:
-        main_view.screen.blit(player.image[player.img_index], player.rect)
+        player.draw(main_view, player.img_index)
         # make dynamic effect by changing img_index
         player.img_index = shoot_frequency // 8
     else:
         player.img_index = player_down_index // 8
-        main_view.screen.blit(player.image[player.img_index], player.rect)
+        player.draw(main_view, player.img_index)
         player_down_index += 1
         if player_down_index > 47:
             running = False
@@ -49,20 +49,22 @@ while running:
     if not player.is_hit:
         if shoot_frequency % 15 == 0:
             #bullet_sound.play()
-            player.shoot(bullet1_img)
+            player.shoot()
 
         shoot_frequency += 1
         if shoot_frequency >= 15:
             shoot_frequency = 0
 
-    # Move bullet
+    #### Move bullet
     for bullet in player.bullets:
         bullet.move()
         if bullet.rect.bottom < 0:
             player.bullets.remove(bullet)
 
-    # Show on the screen
+    #### Show on the screen
     player.bullets.draw(main_view.screen)
+
+    ### Draw enemy
 
 
     # Update display

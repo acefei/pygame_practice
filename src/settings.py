@@ -11,3 +11,5 @@ SHOOT_IMAGE_PACK = '{}/../res/image/shoot.pack'.format(LOCATION)
 
 PLAYER_SPEED = 8
 BULLET_SPEED = 10
+ENEMY_SPEED = 2
+

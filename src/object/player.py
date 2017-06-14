@@ -3,21 +3,42 @@ from bullet import *
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, plane_img, player_rect, init_pos, settings):
+    def __init__(self, image, image_pack, init_pos, settings):
         pygame.sprite.Sprite.__init__(self)
-        self.image = []
-        for i in range(len(player_rect)):
-            self.image.append(plane_img.subsurface(player_rect[i]).convert_alpha())
-        self.rect = player_rect[0]
+        self._image = image
+        self._image_pack = image_pack
+        self._set_player_rect(image_pack)
+        self._set_player_image(image)
+
+        self.rect = self.player_rect[0]
         self.rect.topleft = init_pos
+
         self.speed = settings.PLAYER_SPEED
         self.bullets = pygame.sprite.Group()
         self.img_index = 0
         self.is_hit = False
         self.settings = settings
 
-    def shoot(self, bullet_img):
-        bullet = Bullet(bullet_img, self.rect.midtop, self.settings)
+
+    def _set_player_rect(self, image_pack):
+        self.player_rect = []
+        for k in sorted(image_pack.keys()):
+            if 'hero' not in k:
+                continue
+            (left, top) = map(int, image_pack[k]['xy'].split(','))
+            (width, height) = map(int, image_pack[k]['size'].split(','))
+            self.player_rect.append(pygame.Rect(left, top, width, height))
+
+    def _set_player_image(self, image):
+        self.player_image = []
+        for i, _ in enumerate(self.player_rect):
+            self.player_image.append(image.subsurface(self.player_rect[i]).convert_alpha())
+
+    def draw(self, view, img_index):
+            view.screen.blit(self.player_image[img_index], self.rect)
+
+    def shoot(self):
+        bullet = Bullet(self._image, self._image_pack, self.rect.midtop, self.settings)
         self.bullets.add(bullet)
 
     def moveUp(self):
