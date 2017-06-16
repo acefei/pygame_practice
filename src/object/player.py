@@ -35,7 +35,7 @@ class Player(pygame.sprite.Sprite):
             self.player_image.append(image.subsurface(self.player_rect[i]).convert_alpha())
 
     def draw(self, view, img_index):
-            view.screen.blit(self.player_image[img_index], self.rect)
+        view.screen.blit(self.player_image[img_index], self.rect)
 
     def shoot(self):
         bullet = Bullet(self._image, self._image_pack, self.rect.midtop, self.settings)
